@@ -7,8 +7,8 @@ class Fetch extends Component {
       error: null,
       isLoaded: false,
       items: null,
-
-      value: null,
+      value: '',
+      card: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -30,10 +30,10 @@ class Fetch extends Component {
       .then((res) => res.json())
       .then(
         (results) => {
-          console.log('hello');
           this.setState({
             isLoaded: true,
             items: JSON.stringify(results),
+            card: results.cards[0],
           });
         },
         (error) => {
@@ -46,8 +46,8 @@ class Fetch extends Component {
   }
 
   render() {
-    const { error, isLoaded, items } = this.state;
-    console.log(items);
+    const { error, isLoaded } = this.state;
+
     if (error) {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded) {
@@ -67,7 +67,24 @@ class Fetch extends Component {
         </div>
       );
     } else {
-      return items;
+      return (
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Name:
+              <input
+                type='text'
+                value={this.state.value}
+                onChange={this.handleChange}
+              />
+            </label>
+            <input type='submit' value='Submit' />
+          </form>
+          <div>{this.state.items}</div>
+
+          {console.log(this.state.card)}
+        </div>
+      );
     }
   }
 }
