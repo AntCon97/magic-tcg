@@ -8,7 +8,7 @@ class Fetch extends Component {
       isLoaded: false,
       items: null,
       value: '',
-      card: '',
+      submit: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -16,15 +16,21 @@ class Fetch extends Component {
   }
 
   handleChange(event) {
-    this.setState({ value: event.target.value });
+    this.setState({
+      value: event.target.value,
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let url =
-      'https://api.magicthegathering.io/v1/cards?name="' +
-      this.state.value +
-      '"';
+    this.setState({
+      submit: true,
+
+      error: null,
+      isLoaded: false,
+      items: null,
+    });
+    let url = 'https://api.scryfall.com/cards/named?exact=' + this.state.value;
 
     fetch(url)
       .then((res) => res.json())
@@ -32,8 +38,7 @@ class Fetch extends Component {
         (results) => {
           this.setState({
             isLoaded: true,
-            items: JSON.stringify(results),
-            card: results.cards[0],
+            items: results,
           });
         },
         (error) => {
@@ -50,7 +55,24 @@ class Fetch extends Component {
 
     if (error) {
       return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
+    } else if (!isLoaded && this.state.submit) {
+      return (
+        <div>
+          <form onSubmit={this.handleSubmit}>
+            <label>
+              Name:
+              <input
+                type='text'
+                value={this.state.value}
+                onChange={this.handleChange}
+              />
+            </label>
+            <input type='submit' value='Submit' />
+          </form>
+          <span>Loading...</span>
+        </div>
+      );
+    } else if (!isLoaded && !this.state.submit) {
       return (
         <div>
           <form onSubmit={this.handleSubmit}>
@@ -80,9 +102,10 @@ class Fetch extends Component {
             </label>
             <input type='submit' value='Submit' />
           </form>
-          <div>{this.state.items}</div>
-
-          {console.log(this.state.card)}
+          <div>{this.state.items.name}</div>
+          <div>{this.state.items.flavor_text}</div>
+          <img src={this.state.items.image_uris['normal']} alt=''></img>
+          {console.log(this.state.items)}
         </div>
       );
     }
