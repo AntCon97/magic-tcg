@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Fetch.css';
 
 class Fetch extends Component {
   constructor(props) {
@@ -23,31 +24,35 @@ class Fetch extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({
-      submit: true,
+    if (!this.state.value) {
+    } else {
+      this.setState({
+        submit: true,
 
-      error: null,
-      isLoaded: false,
-      items: null,
-    });
-    let url = 'https://api.scryfall.com/cards/named?exact=' + this.state.value;
+        error: null,
+        isLoaded: false,
+        items: null,
+      });
+      let url =
+        'https://api.scryfall.com/cards/named?exact=' + this.state.value;
 
-    fetch(url)
-      .then((res) => res.json())
-      .then(
-        (results) => {
-          this.setState({
-            isLoaded: true,
-            items: results,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
+      fetch(url)
+        .then((res) => res.json())
+        .then(
+          (results) => {
+            this.setState({
+              isLoaded: true,
+              items: results,
+            });
+          },
+          (error) => {
+            this.setState({
+              isLoaded: true,
+              error,
+            });
+          }
+        );
+    }
   }
 
   render() {
@@ -57,14 +62,18 @@ class Fetch extends Component {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded && this.state.submit) {
       return (
-        <div>
+        <div className='page'>
+          <div>
+            <h1 className='header'>Magic The Gathering Search Bar</h1>
+          </div>
           <form onSubmit={this.handleSubmit}>
-            <label>
+            <label className='form'>
               Name:
               <input
                 type='text'
                 value={this.state.value}
                 onChange={this.handleChange}
+                className='form'
               />
             </label>
             <input type='submit' value='Submit' />
@@ -74,14 +83,18 @@ class Fetch extends Component {
       );
     } else if (!isLoaded && !this.state.submit) {
       return (
-        <div>
+        <div className='page'>
+          <div>
+            <h1 className='header'>Magic The Gathering Search Bar</h1>
+          </div>
           <form onSubmit={this.handleSubmit}>
-            <label>
+            <label className='form'>
               Name:
               <input
                 type='text'
                 value={this.state.value}
                 onChange={this.handleChange}
+                className='form'
               />
             </label>
             <input type='submit' value='Submit' />
@@ -90,20 +103,30 @@ class Fetch extends Component {
       );
     } else {
       return (
-        <div>
+        <div className='page'>
+          <div>
+            <h1 className='header'>Magic The Gathering Search Bar</h1>
+          </div>
           <form onSubmit={this.handleSubmit}>
-            <label>
+            <label className='form'>
               Name:
               <input
                 type='text'
                 value={this.state.value}
                 onChange={this.handleChange}
+                className='form'
               />
             </label>
             <input type='submit' value='Submit' />
           </form>
-          <div>{this.state.items.name}</div>
-          <div>{this.state.items.flavor_text}</div>
+          <div>
+            <span>Name: </span>
+            {this.state.items.name}
+          </div>
+          <div>
+            <span>Flavor Text: </span>
+            {this.state.items.flavor_text}
+          </div>
           <img src={this.state.items.image_uris['normal']} alt=''></img>
           {console.log(this.state.items)}
         </div>
