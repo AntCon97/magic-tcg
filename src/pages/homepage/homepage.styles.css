@@ -1,0 +1,37 @@
+.row {
+  padding-top: 15px;
+  display: flex;
+}
+
+.column {
+  flex: 50%;
+}
+
+.left {
+  margin: auto;
+  background-color: #bdb6c9;
+  height: 100vh;
+  max-width: 75%;
+  max-height: 50%;
+  text-align: left;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-top: 15px;
+  border-style: solid;
+}
+
+.inner {
+  padding-top: 25px;
+}
+
+.response {
+  max-width: 50%;
+  float: right;
+  padding-right: 15px;
+
+  word-wrap: break-word;
+  display: inline-block;
+}
+
+.submit {
+}
