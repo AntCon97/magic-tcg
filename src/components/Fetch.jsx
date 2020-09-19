@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Fetch.css';
+import HomePage from './../pages/homepage/homepage';
 
 class Fetch extends Component {
   constructor(props) {
@@ -7,9 +8,17 @@ class Fetch extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      items: null,
       value: '',
       submit: false,
+      cmc: '',
+      img: '',
+      name: '',
+      types: '',
+      ability: '',
+      pt: '',
+      sets: '',
+      legal: '',
+      items: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -28,7 +37,6 @@ class Fetch extends Component {
     } else {
       this.setState({
         submit: true,
-
         error: null,
         isLoaded: false,
         items: null,
@@ -43,6 +51,7 @@ class Fetch extends Component {
             this.setState({
               isLoaded: true,
               items: results,
+              cmc: results.colors[0],
             });
           },
           (error) => {
@@ -62,7 +71,7 @@ class Fetch extends Component {
       return <div>Error: {error.message}</div>;
     } else if (!isLoaded && this.state.submit) {
       return (
-        <div className='page'>
+        <div>
           <div>
             <h1 className='header'>Magic The Gathering Search Bar</h1>
           </div>
@@ -79,11 +88,12 @@ class Fetch extends Component {
             <input type='submit' value='Submit' />
           </form>
           <span>Loading...</span>
+          <HomePage />
         </div>
       );
     } else if (!isLoaded && !this.state.submit) {
       return (
-        <div className='page'>
+        <div>
           <div>
             <h1 className='header'>Magic The Gathering Search Bar</h1>
           </div>
@@ -99,11 +109,12 @@ class Fetch extends Component {
             </label>
             <input type='submit' value='Submit' />
           </form>
+          <HomePage />
         </div>
       );
     } else {
       return (
-        <div className='page'>
+        <div>
           <div>
             <h1 className='header'>Magic The Gathering Search Bar</h1>
           </div>
@@ -119,16 +130,17 @@ class Fetch extends Component {
             </label>
             <input type='submit' value='Submit' />
           </form>
-          <div>
-            <span>Name: </span>
-            {this.state.items.name}
-          </div>
-          <div>
-            <span>Flavor Text: </span>
-            {this.state.items.flavor_text}
-          </div>
-          <img src={this.state.items.image_uris['normal']} alt=''></img>
-          {console.log(this.state.items)}
+
+          <HomePage
+            name={this.state.name}
+            cmc={this.state.cmc}
+            types={this.state.types}
+            ability={this.state.ability}
+            pt={this.state.pt}
+            sets={this.state.sets}
+            legal={this.state.legal}
+            img={this.state.img}
+          />
         </div>
       );
     }
