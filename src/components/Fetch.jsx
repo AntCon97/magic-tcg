@@ -48,11 +48,35 @@ class Fetch extends Component {
         .then((res) => res.json())
         .then(
           (results) => {
+            let str2 = '';
+            if (!results.power) {
+            } else {
+              str2 = results.power + '/' + results.toughness;
+            }
+
+            let str = '';
+
+            Object.keys(results.legalities).forEach(function (key) {
+              if (
+                results.legalities[key] === 'legal' &&
+                (key === 'commander' || key === 'modern' || key === 'standard')
+              ) {
+                str = str + key + ' ';
+              }
+            });
             this.setState({
               isLoaded: true,
               items: results,
               cmc: results.colors[0],
+              name: results.name,
+              types: results.type_line,
+              img: results.image_uris.normal,
+              legal: str,
+              sets: results.set,
+              pt: str2,
+              ability: results.keywords[0],
             });
+            console.log(this.state.items);
           },
           (error) => {
             this.setState({
